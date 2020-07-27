@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="lk.spacewa.boilerplate.ui.home.HomeViewModel" />
+            type="lk.spacewa.coroutines.ui.home.HomeViewModel" />
 
     </data>
 

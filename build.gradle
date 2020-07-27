@@ -75,6 +75,7 @@ ext {
     navCompVersion = "1.0.0"
     apolloVersion = "2.2.2"
     okhttp3Version = "4.7.2"
+    room_version = "2.2.5"
 
     hiltJetpack = '1.0.0-alpha01'
     rxjava3Version = '3.0.4'

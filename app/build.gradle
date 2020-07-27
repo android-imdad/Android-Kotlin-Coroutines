@@ -13,7 +13,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        applicationId "lk.spacewa.boilerplate"
+        applicationId "lk.spacewa.coroutines"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -84,8 +84,11 @@ dependencies {
 
     //network
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp3Version"
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.1"
 
+    //room
+    implementation "androidx.room:room-ktx:$rootProject.room_version"
+    annotationProcessor "androidx.room:room-compiler:$rootProject.room_version"
 
     //Apollo Graphql
     implementation "com.apollographql.apollo:apollo-runtime:$rootProject.apolloVersion"
