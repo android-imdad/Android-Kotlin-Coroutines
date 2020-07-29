@@ -29,7 +29,6 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
         getPokemonInfo()
     }
 
-    val pokemonRoomList : ArrayList<Pokemon> = arrayListOf()
 
     val pokemonsUsingFlow : LiveData<List<Pokemon>> = dataManager.pokemonsFlow.asLiveData()
 
@@ -41,10 +40,7 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
 
     private suspend fun saveApolloModelsToRoom(){
         val pokemonApolloData : Response<GetPokemonsQuery.Data>? = dataManager?.getPokemonsAsync()?.await()
-        for (pokemon in pokemonApolloData?.data?.pokemons()!!) {
-            pokemonRoomList.add(Pokemon(pokemon.id(), pokemon.name()!!, pokemon.image()!!, pokemon.number()!!))
-        }
-        dataManager!!.insertPokemons(pokemonRoomList)
+        pokemonApolloData?.data?.pokemons()?.let { dataManager!!.insertPokemons(it) }
     }
 
 

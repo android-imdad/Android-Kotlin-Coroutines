@@ -4,7 +4,10 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.toDeferred
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import lk.spacewa.coroutines.GetPokemonsQuery
+import lk.spacewa.coroutines.data.model.db.Pokemon
 import lk.spacewa.coroutines.utils.rx.SchedulerProvider
 import javax.inject.Inject
 
@@ -18,5 +21,7 @@ class PokemonRepositoryImpl @Inject constructor(private val mApolloClient: Apoll
         val getPokemonsQuery = GetPokemonsQuery.builder().build()
         return mApolloClient.query(getPokemonsQuery).toDeferred()
     }
+
+
 
 }
