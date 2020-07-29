@@ -16,7 +16,6 @@ import lk.spacewa.coroutines.data.local.db.PokemonDBRepo
 import lk.spacewa.coroutines.data.local.db.PokemonDBRepoImpl
 import lk.spacewa.coroutines.data.local.prefs.PreferencesHelper
 import lk.spacewa.coroutines.data.local.prefs.PreferencesHelperImpl
-import lk.spacewa.coroutines.data.remote.ApolloRxHelper
 import lk.spacewa.coroutines.data.remote.repository.PokemonRepository
 import lk.spacewa.coroutines.data.remote.repository.PokemonRepositoryImpl
 import lk.spacewa.coroutines.di.DatabaseInfo
@@ -84,11 +83,6 @@ class AppModule {
         return pokemonRepositoryImpl
     }
 
-    @Provides
-    @Singleton
-    fun providesApolloRxHelper(): ApolloRxHelper {
-        return ApolloRxHelper()
-    }
 
     @Provides
     fun provideSchedulerProvider(): SchedulerProvider {
