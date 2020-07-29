@@ -11,12 +11,12 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.R
+import lk.spacewa.coroutines.data.model.db.Pokemon
 import lk.spacewa.coroutines.databinding.ItemPokemonDetailsBinding
 
-class HomeRvAdapter(myDataset: List<GetPokemonsQuery.Pokemon>, context: Context) : RecyclerView.Adapter<HomeRvAdapter.ViewHolder?>() {
-    private val mDataset: List<GetPokemonsQuery.Pokemon> = myDataset
+class HomeRvAdapter(myDataset: List<Pokemon>, context: Context) : RecyclerView.Adapter<HomeRvAdapter.ViewHolder?>() {
+    private val mDataset: List<Pokemon> = myDataset
     private val mContext: Context = context
 
 
@@ -35,7 +35,7 @@ class HomeRvAdapter(myDataset: List<GetPokemonsQuery.Pokemon>, context: Context)
     }
 
     private fun initRecyclerView(holder: ViewHolder, position: Int) {
-        val pokemon: GetPokemonsQuery.Pokemon = mDataset[position]
+        val pokemon: Pokemon = mDataset[position]
 
         var requestOptions = RequestOptions()
         requestOptions = requestOptions
@@ -44,12 +44,12 @@ class HomeRvAdapter(myDataset: List<GetPokemonsQuery.Pokemon>, context: Context)
                 .error(R.mipmap.ic_launcher)
 
         Glide.with(mContext)
-                .load(pokemon.image())
+                .load(pokemon.imageUrl)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .apply(requestOptions)
                 .into(holder.mBinding.imgPokemon)
 
-        holder.mBinding.tvPokemon.text = pokemon.name()
+        holder.mBinding.tvPokemon.text = pokemon.name
 
     }
 

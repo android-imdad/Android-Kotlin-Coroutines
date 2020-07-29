@@ -1,8 +1,15 @@
 package lk.spacewa.coroutines.ui.home
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.api.Response
 import dagger.hilt.android.scopes.ActivityScoped
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapLatest
 import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.ui.base.BaseViewModel
 import lk.spacewa.coroutines.data.DataManager
@@ -18,12 +25,13 @@ import lk.spacewa.coroutines.utils.rx.SchedulerProvider
 @ActivityScoped
 class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, schedulerProvider: SchedulerProvider) : BaseViewModel(dataManager, schedulerProvider){
 
-    var pokemonDataEvent : SingleLiveEvent<GetPokemonsQuery.Data> = SingleLiveEvent()
-    val pokemonRoomList : ArrayList<Pokemon> = arrayListOf()
-
     init {
         getPokemonInfo()
     }
+
+    val pokemonRoomList : ArrayList<Pokemon> = arrayListOf()
+
+    val pokemonsUsingFlow : LiveData<List<Pokemon>> = dataManager.pokemonsFlow.asLiveData()
 
     fun getPokemonInfo(){
         launchDataLoad {
@@ -38,6 +46,7 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
         }
         dataManager!!.insertPokemons(pokemonRoomList)
     }
+
 
 
 }

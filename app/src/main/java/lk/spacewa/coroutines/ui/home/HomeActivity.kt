@@ -8,6 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import lk.spacewa.coroutines.BR
 import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.R
+import lk.spacewa.coroutines.data.model.db.Pokemon
 import lk.spacewa.coroutines.ui.base.BaseActivity
 import lk.spacewa.coroutines.databinding.ActivityHomeBinding
 
@@ -36,13 +37,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding?, HomeViewModel?>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel?.getPokemonInfo()
-        viewModel?.pokemonDataEvent?.observe(this, Observer {
-            initRecyclerView(it as GetPokemonsQuery.Data)
+        viewModel?.pokemonsUsingFlow?.observe(this, Observer {
+            initRecyclerView(it)
         })
     }
 
-    private fun initRecyclerView(pokemonData : GetPokemonsQuery.Data){
-        val homeRvAdapter = HomeRvAdapter(pokemonData.pokemons()!!, this@HomeActivity)
+    private fun initRecyclerView(pokemonList : List<Pokemon>){
+        val homeRvAdapter = HomeRvAdapter(pokemonList!!, this@HomeActivity)
         val layoutManager = LinearLayoutManager(this@HomeActivity)
         viewDataBinding?.rvPokemonDetails?.setLayoutManager(layoutManager)
         viewDataBinding?.rvPokemonDetails?.adapter = homeRvAdapter
