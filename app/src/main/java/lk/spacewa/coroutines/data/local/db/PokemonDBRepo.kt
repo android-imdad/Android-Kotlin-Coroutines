@@ -1,6 +1,7 @@
 package lk.spacewa.coroutines.data.local.db
 
 import kotlinx.coroutines.flow.Flow
+import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.data.model.db.Pokemon
 
 /**
@@ -10,5 +11,5 @@ interface PokemonDBRepo {
 
     val pokemonsFlow : Flow<List<Pokemon>>
     val pokemonsSortedByNumber : Flow<List<Pokemon>>
-    suspend fun insertPokemons(pokemons : List<Pokemon>)
+    suspend fun insertPokemons(pokemons : List<GetPokemonsQuery.Pokemon>)
 }
