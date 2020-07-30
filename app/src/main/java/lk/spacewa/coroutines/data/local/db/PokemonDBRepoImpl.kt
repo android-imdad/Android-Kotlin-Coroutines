@@ -1,7 +1,9 @@
 package lk.spacewa.coroutines.data.local.db
 
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import lk.spacewa.coroutines.GetPokemonsQuery
@@ -13,6 +15,8 @@ import javax.inject.Inject
  */
 class PokemonDBRepoImpl @Inject constructor(private val mAppDatabase: AppDatabase) : PokemonDBRepo {
 
+    private val defaultDispatcher : CoroutineDispatcher = Dispatchers.Default
+
     override val pokemonsFlow: Flow<List<Pokemon>>
         get() = mAppDatabase.pokemonDao()?.getPokemons()!!
 
@@ -20,14 +24,19 @@ class PokemonDBRepoImpl @Inject constructor(private val mAppDatabase: AppDatabas
         get() = mAppDatabase.pokemonDao()?.getPokemonsByNumber()!!
 
     override suspend fun insertPokemons(pokemons: List<GetPokemonsQuery.Pokemon>) {
-        withContext(Dispatchers.Default) {
+        mAppDatabase.pokemonDao()?.insertAll(convertModels(pokemons))
+    }
+
+    private suspend fun convertModels(pokemons : List<GetPokemonsQuery.Pokemon>) : List<Pokemon> = coroutineScope{
+        withContext(defaultDispatcher) {
             val pokemonRoomList : ArrayList<Pokemon> = arrayListOf()
             for (pokemon in pokemons) {
                 pokemonRoomList.add(Pokemon(pokemon.id(), pokemon.name()!!, pokemon.image()!!, pokemon.number()!!))
             }
-            mAppDatabase.pokemonDao()?.insertAll(pokemonRoomList)
+            pokemonRoomList
         }
     }
+
 
 
 }
