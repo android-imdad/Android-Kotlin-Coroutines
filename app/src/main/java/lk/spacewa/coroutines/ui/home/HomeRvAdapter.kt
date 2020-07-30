@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -15,13 +17,14 @@ import lk.spacewa.coroutines.R
 import lk.spacewa.coroutines.data.model.db.Pokemon
 import lk.spacewa.coroutines.databinding.ItemPokemonDetailsBinding
 
-class HomeRvAdapter(myDataset: List<Pokemon>, context: Context) : RecyclerView.Adapter<HomeRvAdapter.ViewHolder?>() {
-    private val mDataset: List<Pokemon> = myDataset
-    private val mContext: Context = context
+
+
+class HomeRvAdapter : ListAdapter<Pokemon, HomeRvAdapter.ViewHolder?>(PokemonDiffCallBack()) {
+
 
 
     // Create new views (invoked by the layout manager)
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRvAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // create a new view
         val layoutInflater = LayoutInflater.from(parent.context)
         // set the view's size, margins, paddings and layout parameters
@@ -35,7 +38,7 @@ class HomeRvAdapter(myDataset: List<Pokemon>, context: Context) : RecyclerView.A
     }
 
     private fun initRecyclerView(holder: ViewHolder, position: Int) {
-        val pokemon: Pokemon = mDataset[position]
+        val pokemon: Pokemon = getItem(position)
 
         var requestOptions = RequestOptions()
         requestOptions = requestOptions
@@ -43,7 +46,7 @@ class HomeRvAdapter(myDataset: List<Pokemon>, context: Context) : RecyclerView.A
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
 
-        Glide.with(mContext)
+        Glide.with(holder.mBinding.root)
                 .load(pokemon.imageUrl)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .apply(requestOptions)
@@ -63,7 +66,18 @@ class HomeRvAdapter(myDataset: List<Pokemon>, context: Context) : RecyclerView.A
 
     }
 
-    override fun getItemCount(): Int {
-        return mDataset.size
+
+    /**
+     * Uses DiffUtil to compare items in a list and automatically make changes only to the items which differ
+     */
+    private class PokemonDiffCallBack : DiffUtil.ItemCallback<Pokemon>() {
+
+        override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+            return oldItem.pokemonId == newItem.pokemonId
+        }
+
+        override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+            return oldItem == newItem
+        }
     }
 }
