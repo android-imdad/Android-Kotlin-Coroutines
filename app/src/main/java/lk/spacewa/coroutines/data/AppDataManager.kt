@@ -77,7 +77,7 @@ class AppDataManager @Inject constructor(@ApplicationContext private val mContex
     override val pokemonsSortedByNumber: Flow<List<Pokemon>>
         get() = mAppPokemonDBRepo.pokemonsSortedByNumber
 
-    override suspend fun insertPokemons(pokemons: List<Pokemon>) {
+    override suspend fun insertPokemons(pokemons: List<GetPokemonsQuery.Pokemon>) {
         mAppPokemonDBRepo.insertPokemons(pokemons)
     }
 
