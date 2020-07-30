@@ -2,12 +2,14 @@ package lk.spacewa.coroutines.ui.home
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.api.Response
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import lk.spacewa.coroutines.GetPokemonsQuery
@@ -25,12 +27,19 @@ import lk.spacewa.coroutines.utils.rx.SchedulerProvider
 @ActivityScoped
 class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, schedulerProvider: SchedulerProvider) : BaseViewModel(dataManager, schedulerProvider){
 
-    init {
-        getPokemonInfo()
-    }
+
+    private val isSortedAlphabetically = MutableLiveData<Boolean>(true)
+    private val pokemonChannel = ConflatedBroadcastChannel<Boolean>()
 
 
-    val pokemonsUsingFlow : LiveData<List<Pokemon>> = dataManager.pokemonsFlow.asLiveData()
+    val pokemonsUsingFlow : LiveData<List<Pokemon>> = pokemonChannel.asFlow()
+            .flatMapLatest { isSortedAlphabetically ->
+                if(isSortedAlphabetically){
+                    dataManager.pokemonsFlow
+                } else {
+                    dataManager.pokemonsSortedByNumber
+                }
+            }.asLiveData()
 
     fun getPokemonInfo(){
         launchDataLoad {
@@ -43,6 +52,19 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
         pokemonApolloData?.data?.pokemons()?.let { dataManager!!.insertPokemons(it) }
     }
 
+    fun switchData(){
+        if(isSortedAlphabetically.value == true) {
+            isSortedAlphabetically.value = false
+            pokemonChannel.offer(isSortedAlphabetically.value!!)
+        } else {
+            isSortedAlphabetically.value = true
+            pokemonChannel.offer(isSortedAlphabetically.value!!)
+        }
+    }
 
+    init {
+        getPokemonInfo()
+        pokemonChannel.offer(isSortedAlphabetically.value!!)
+    }
 
 }
