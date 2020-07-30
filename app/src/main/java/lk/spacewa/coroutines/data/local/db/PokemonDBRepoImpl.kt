@@ -27,6 +27,9 @@ class PokemonDBRepoImpl @Inject constructor(private val mAppDatabase: AppDatabas
         mAppDatabase.pokemonDao()?.insertAll(convertModels(pokemons))
     }
 
+    /**
+     * Main-safe function running on Dispatchers.Default as to not block the main thread
+     */
     private suspend fun convertModels(pokemons : List<GetPokemonsQuery.Pokemon>) : List<Pokemon> = coroutineScope{
         withContext(defaultDispatcher) {
             val pokemonRoomList : ArrayList<Pokemon> = arrayListOf()
