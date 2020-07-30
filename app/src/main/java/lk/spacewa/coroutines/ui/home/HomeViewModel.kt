@@ -41,7 +41,7 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
     private val pokemonChannel = ConflatedBroadcastChannel<Boolean>()
 
     /**
-     * A list of pokemons updated based on the sort order from the DB
+     * A list of pokemons updated based on the sort order from the DB using Flows
      */
     val pokemonsUsingFlow : LiveData<List<Pokemon>> = pokemonChannel.asFlow()
             .flatMapLatest { isSortedAlphabetically ->
