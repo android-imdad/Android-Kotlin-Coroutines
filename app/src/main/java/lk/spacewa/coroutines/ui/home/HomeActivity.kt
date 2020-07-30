@@ -1,6 +1,7 @@
 package lk.spacewa.coroutines.ui.home
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,16 +38,27 @@ class HomeActivity : BaseActivity<ActivityHomeBinding?, HomeViewModel?>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel?.getPokemonInfo()
-        viewModel?.pokemonsUsingFlow?.observe(this, Observer {
-            initRecyclerView(it)
-        })
+        initRecyclerView()
+        setListeners()
     }
 
-    private fun initRecyclerView(pokemonList : List<Pokemon>){
-        val homeRvAdapter = HomeRvAdapter(pokemonList!!, this@HomeActivity)
+    private fun setListeners(){
+        viewDataBinding?.fabSortPokemons?.setOnClickListener {
+            viewModel?.switchData()
+        }
+    }
+    private fun initRecyclerView(){
+        val homeRvAdapter = HomeRvAdapter()
         val layoutManager = LinearLayoutManager(this@HomeActivity)
-        viewDataBinding?.rvPokemonDetails?.setLayoutManager(layoutManager)
+        viewDataBinding?.rvPokemonDetails?.layoutManager = layoutManager
         viewDataBinding?.rvPokemonDetails?.adapter = homeRvAdapter
+        subscribeUI(homeRvAdapter)
+    }
+
+    private fun subscribeUI(adapter: HomeRvAdapter){
+        viewModel?.pokemonsUsingFlow?.observe(this, Observer {
+            adapter.submitList(it)
+        })
     }
 
 

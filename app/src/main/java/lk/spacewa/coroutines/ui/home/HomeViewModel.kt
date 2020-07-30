@@ -4,19 +4,15 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.api.Response
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.mapLatest
 import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.ui.base.BaseViewModel
 import lk.spacewa.coroutines.data.DataManager
 import lk.spacewa.coroutines.data.model.db.Pokemon
-import lk.spacewa.coroutines.utils.SingleLiveEvent
 import lk.spacewa.coroutines.utils.rx.SchedulerProvider
 
 /**
@@ -43,7 +39,6 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
      * even if you write to it from multiple channels, the last sent request will be the one which persists
      */
     private val pokemonChannel = ConflatedBroadcastChannel<Boolean>()
-
 
     /**
      * A list of pokemons updated based on the sort order from the DB
@@ -89,5 +84,9 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
         }
     }
 
+    init {
+        getPokemonInfo()
+        pokemonChannel.offer(isSortedAlphabetically.value!!)
+    }
 
 }

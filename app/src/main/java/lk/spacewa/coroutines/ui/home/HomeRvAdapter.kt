@@ -18,9 +18,7 @@ import lk.spacewa.coroutines.data.model.db.Pokemon
 import lk.spacewa.coroutines.databinding.ItemPokemonDetailsBinding
 
 
-
 class HomeRvAdapter : ListAdapter<Pokemon, HomeRvAdapter.ViewHolder?>(PokemonDiffCallBack()) {
-
 
 
     // Create new views (invoked by the layout manager)
