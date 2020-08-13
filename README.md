@@ -16,6 +16,7 @@ An example app exploring how coroutines are used in Android with RoomDB, Apollo 
 4. Glide: https://github.com/bumptech/glide
 5. Apollo Graphql: https://www.apollographql.com/
 6. MVVM Architecture : https://developer.android.com/jetpack/guide
+7. WorkManager : https://codelabs.developers.google.com/codelabs/android-workmanager/#0
 
 ### Concept reference resources:
 1. [Introduction to Kotlin Coroutines](https://codelabs.developers.google.com/codelabs/kotlin-coroutines/)
