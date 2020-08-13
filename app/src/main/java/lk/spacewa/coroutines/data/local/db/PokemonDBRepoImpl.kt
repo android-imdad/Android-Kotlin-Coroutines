@@ -1,6 +1,7 @@
 package lk.spacewa.coroutines.data.local.db
 
 
+import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -8,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.data.model.db.Pokemon
+import timber.log.Timber
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -17,11 +20,12 @@ class PokemonDBRepoImpl @Inject constructor(private val mAppDatabase: AppDatabas
 
     private val defaultDispatcher : CoroutineDispatcher = Dispatchers.Default
 
-    override val pokemonsFlow: Flow<List<Pokemon>>
-        get() = mAppDatabase.pokemonDao()?.getPokemons()!!
 
-    override val pokemonsSortedByNumber: Flow<List<Pokemon>>
-        get() = mAppDatabase.pokemonDao()?.getPokemonsByNumber()!!
+    override val pokemonLiveData: LiveData<List<Pokemon>>
+        get() = mAppDatabase.pokemonDao()?.getPokemonsLiveData()!!
+
+    override val pokemonLiveDataSortedByNumber: LiveData<List<Pokemon>>
+        get() = mAppDatabase.pokemonDao()?.getPokemonsLiveDataByNumber()!!
 
     override suspend fun insertPokemons(pokemons: List<GetPokemonsQuery.Pokemon>) {
         mAppDatabase.pokemonDao()?.insertAll(convertModels(pokemons))

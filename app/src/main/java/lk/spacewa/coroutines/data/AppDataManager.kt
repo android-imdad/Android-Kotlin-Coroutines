@@ -1,6 +1,7 @@
 package lk.spacewa.coroutines.data
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.apollographql.apollo.api.Response
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -68,14 +69,27 @@ class AppDataManager @Inject constructor(@ApplicationContext private val mContex
         }
 
     override fun getPokemonsAsync(): Deferred<Response<GetPokemonsQuery.Data>> {
-       return mPokemonRepository.getPokemonsAsync()
+       return mPokemonRepository.getPokemonsAsync()!!
     }
 
-    override val pokemonsFlow: Flow<List<Pokemon>>
-        get() = mAppPokemonDBRepo.pokemonsFlow
+    override suspend fun getPokemonsAndSave() {
+        return mPokemonRepository.getPokemonsAndSave()
+    }
 
-    override val pokemonsSortedByNumber: Flow<List<Pokemon>>
-        get() = mAppPokemonDBRepo.pokemonsSortedByNumber
+    override suspend fun getPokemonsSync(): Response<GetPokemonsQuery.Data?> {
+        return mPokemonRepository.getPokemonsSync()
+    }
+
+    override fun getPokemonsAndSaveBlocking() {
+        return mPokemonRepository.getPokemonsAndSaveBlocking()
+    }
+
+    override val pokemonLiveData: LiveData<List<Pokemon>>
+        get() = mAppPokemonDBRepo.pokemonLiveData
+
+    override val pokemonLiveDataSortedByNumber: LiveData<List<Pokemon>>
+        get() = mAppPokemonDBRepo.pokemonLiveDataSortedByNumber
+
 
     override suspend fun insertPokemons(pokemons: List<GetPokemonsQuery.Pokemon>) {
         mAppPokemonDBRepo.insertPokemons(pokemons)
