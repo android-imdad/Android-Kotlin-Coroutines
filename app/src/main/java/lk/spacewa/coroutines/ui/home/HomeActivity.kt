@@ -12,6 +12,7 @@ import lk.spacewa.coroutines.R
 import lk.spacewa.coroutines.data.model.db.Pokemon
 import lk.spacewa.coroutines.ui.base.BaseActivity
 import lk.spacewa.coroutines.databinding.ActivityHomeBinding
+import timber.log.Timber
 
 /**
  * Created by Imdad on 05/11/20.
@@ -37,7 +38,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding?, HomeViewModel?>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel?.getPokemonInfo()
         initRecyclerView()
         setListeners()
     }
@@ -56,9 +56,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding?, HomeViewModel?>() {
     }
 
     private fun subscribeUI(adapter: HomeRvAdapter){
-        viewModel?.pokemonsUsingFlow?.observe(this, Observer {
+        viewModel?.pokemonSortMediator!!.observe(this, Observer {
             adapter.submitList(it)
         })
+
     }
 
 

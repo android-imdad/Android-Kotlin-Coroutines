@@ -84,6 +84,7 @@ ext {
     debugDBVersion = '1.0.3'
     timberVersion = '4.7.0'
     lifecycleVersion = '2.2.0'
+    workManagerVersion = '2.2.0'
 
     // Test dependencies
     junitVersion = '4.12'

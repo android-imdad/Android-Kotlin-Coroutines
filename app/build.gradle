@@ -81,6 +81,8 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$rootProject.hiltJetpack"
     kapt "androidx.hilt:hilt-compiler:$rootProject.hiltJetpack"
+    implementation "androidx.hilt:hilt-work:$rootProject.hiltJetpack"
+    implementation "androidx.hilt:hilt-common:$rootProject.hiltJetpack"
 
     //network
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp3Version"
@@ -124,6 +126,9 @@ dependencies {
     //navigation component
     implementation "android.arch.navigation:navigation-fragment:$rootProject.navCompVersion"
     implementation "android.arch.navigation:navigation-ui:$rootProject.navCompVersion"
+
+    //work manager
+    implementation "androidx.work:work-runtime-ktx:$rootProject.workManagerVersion"
 
 
 
