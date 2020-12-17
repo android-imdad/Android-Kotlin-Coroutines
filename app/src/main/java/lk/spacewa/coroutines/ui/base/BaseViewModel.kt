@@ -25,7 +25,7 @@ abstract class BaseViewModel(val dataManager: DataManager?,
 
     private val _spinner = MutableLiveData<Boolean>(false)
 
-    val compositeDisposable: CompositeDisposable
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
 
     override fun onCleared() {
@@ -42,7 +42,7 @@ abstract class BaseViewModel(val dataManager: DataManager?,
         return viewModelScope.launch {
             try {
                 _spinner.value = true
-                block()
+                block() //The parameter
             } catch (error: Throwable) {
                 Timber.e(error.message)
             } finally {
@@ -60,7 +60,4 @@ abstract class BaseViewModel(val dataManager: DataManager?,
         }.launchIn(viewModelScope)
     }
 
-    init {
-        compositeDisposable = CompositeDisposable()
-    }
 }
