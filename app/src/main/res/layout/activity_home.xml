@@ -24,7 +24,7 @@
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_sort_pokemons"
+            android:id="@+id/fab_sort_starwars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -33,7 +33,7 @@
             app:srcCompat="@drawable/ic_baseline_sort_24" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_pokemon_details"
+            android:id="@+id/rv_starwars_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -2,17 +2,11 @@ package lk.spacewa.coroutines.ui.home
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.apollographql.apollo.api.Response
 import dagger.hilt.android.scopes.ActivityScoped
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.ui.base.BaseViewModel
 import lk.spacewa.coroutines.data.DataManager
-import lk.spacewa.coroutines.data.model.db.Pokemon
+import lk.spacewa.coroutines.data.model.db.Starwars
 import lk.spacewa.coroutines.utils.rx.SchedulerProvider
-import timber.log.Timber
 
 /**
  * Created by Imdad on 05/11/20.
@@ -27,15 +21,15 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
 
     init {
         launchDataLoad {
-            pokemonSortMediator.addSource(pokemonsLiveData, Observer {
+            starwarsSortMediator.addSource(starwarsLiveData, Observer {
                 if(isSortedAlphabetically.value!!){
-                    it.let { pokemonSortMediator.value = it }
+                    it.let { starwarsSortMediator.value = it }
                 }
             })
 
-            pokemonSortMediator.addSource(pokemonsSortedLiveData, Observer {
+            starwarsSortMediator.addSource(starwarsSortedLiveData, Observer {
                 if(!isSortedAlphabetically.value!!){
-                    it.let { pokemonSortMediator.value = it }
+                    it.let { starwarsSortMediator.value = it }
                 }
             })
         }
@@ -48,15 +42,15 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
     private val isSortedAlphabetically = MutableLiveData<Boolean>(true)
 
     /**
-     * A mediator livedata helps switch between two room queries to sort the pokemon
+     * A mediator livedata helps switch between two room queries to sort the starwars films
      */
-    val pokemonSortMediator = MediatorLiveData<List<Pokemon>>()
+    val starwarsSortMediator = MediatorLiveData<List<Starwars>>()
 
     /**
-     * A list of pokemons updated based on the sort order from the DB using LiveData
+     * A list of starwars movies updated based on the sort order from the DB using LiveData
      */
-    var pokemonsLiveData : LiveData<List<Pokemon>> = dataManager.pokemonLiveData
-    var pokemonsSortedLiveData : LiveData<List<Pokemon>> = dataManager.pokemonLiveDataSortedByNumber
+    var starwarsLiveData : LiveData<List<Starwars>> = dataManager.starwarsLiveData
+    var starwarsSortedLiveData : LiveData<List<Starwars>> = dataManager.starwarsLiveDataSortedByID
 
 
     /**
@@ -65,24 +59,24 @@ class HomeViewModel @ViewModelInject constructor(dataManager: DataManager, sched
     fun switchData(){
         if(isSortedAlphabetically.value == true) {
             isSortedAlphabetically.value = false
-            pokemonsSortedLiveData.value.let { pokemonSortMediator.value = it }
+            starwarsSortedLiveData.value.let { starwarsSortMediator.value = it }
         } else {
             isSortedAlphabetically.value = true
-            pokemonsLiveData.value.let { pokemonSortMediator.value = it }
+            starwarsLiveData.value.let { starwarsSortMediator.value = it }
         }
     }
 
     init {
         launchDataLoad {
-            pokemonSortMediator.addSource(pokemonsLiveData, Observer {
+            starwarsSortMediator.addSource(starwarsLiveData, Observer {
                 if(isSortedAlphabetically.value!!){
-                   it.let { pokemonSortMediator.value = it }
+                   it.let { starwarsSortMediator.value = it }
                }
             })
 
-            pokemonSortMediator.addSource(pokemonsSortedLiveData, Observer {
+            starwarsSortMediator.addSource(starwarsSortedLiveData, Observer {
                 if(!isSortedAlphabetically.value!!){
-                    it.let { pokemonSortMediator.value = it }
+                    it.let { starwarsSortMediator.value = it }
                 }
             })
         }

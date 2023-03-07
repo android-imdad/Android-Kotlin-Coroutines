@@ -21,7 +21,7 @@ class ApolloModule {
 
     @Singleton
     @Provides
-    fun providePokemonAPI(okHttpClient: OkHttpClient,@ApplicationContext context: Context): ApolloClient {
+    fun provideStarwarsAPI(okHttpClient: OkHttpClient, @ApplicationContext context: Context): ApolloClient {
         return ApolloClient.builder()
                 .serverUrl(context.getString(R.string.base_api_url))
                 .okHttpClient(okHttpClient)

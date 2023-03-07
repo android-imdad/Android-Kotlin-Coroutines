@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
 import dagger.hilt.android.HiltAndroidApp
-import lk.spacewa.coroutines.data.RefreshPokemonDataWork
+import lk.spacewa.coroutines.data.RefreshStarwarsDataWork
 import lk.spacewa.coroutines.utils.AppLogger
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -28,7 +28,7 @@ class MvvmApp : Application() {
     }
 
     /**
-     * Setup WorkManager background job to 'fetch' new pokemon data daily.
+     * Setup WorkManager background job to 'fetch' new starwars data daily.
      */
     private fun setupWorkManagerJob() {
         // initialize WorkManager with a Factory
@@ -45,13 +45,13 @@ class MvvmApp : Application() {
                 .build()
 
         // Specify that the work should attempt to run every day
-        val work = PeriodicWorkRequestBuilder<RefreshPokemonDataWork>(1, TimeUnit.DAYS)
+        val work = PeriodicWorkRequestBuilder<RefreshStarwarsDataWork>(1, TimeUnit.DAYS)
                 .setConstraints(constraints)
                 .build()
 
         // Enqueue it work WorkManager, keeping any previously scheduled jobs for the same
         // work.
         WorkManager.getInstance(this)
-                .enqueueUniquePeriodicWork(RefreshPokemonDataWork::class.java.name, ExistingPeriodicWorkPolicy.KEEP, work)
+                .enqueueUniquePeriodicWork(RefreshStarwarsDataWork::class.java.name, ExistingPeriodicWorkPolicy.KEEP, work)
     }
 }

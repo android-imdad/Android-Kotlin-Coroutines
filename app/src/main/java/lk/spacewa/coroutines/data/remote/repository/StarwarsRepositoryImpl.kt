@@ -7,8 +7,8 @@ import com.apollographql.apollo.coroutines.toDeferred
 import com.apollographql.apollo.exception.ApolloException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
-import lk.spacewa.coroutines.GetPokemonsQuery
-import lk.spacewa.coroutines.data.local.db.PokemonDBRepo
+import lk.spacewa.coroutines.GetStarwarsQuery
+import lk.spacewa.coroutines.data.local.db.StarwarsDBRepo
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -17,23 +17,26 @@ import kotlin.coroutines.suspendCoroutine
 /**
  * Created by Imdad on 7/11/2020.
  */
-class PokemonRepositoryImpl @Inject constructor(private val mApolloClient: ApolloClient,private val mPokemonDB: PokemonDBRepo) : PokemonRepository {
+class StarwarsRepositoryImpl @Inject constructor(
+    private val mApolloClient: ApolloClient,
+    private val mStarwarsDB: StarwarsDBRepo
+) : StarwarsRepository {
 
 
-    override fun getPokemonsAsync(): Deferred<Response<GetPokemonsQuery.Data>>? {
-        val getPokemonsQuery = GetPokemonsQuery.builder().build()
-            return mApolloClient.query(getPokemonsQuery).toDeferred()
+    override fun getStarwarsAsync(): Deferred<Response<GetStarwarsQuery.Data>>? {
+        val getStarwarsQuery = GetStarwarsQuery.builder().build()
+        return mApolloClient.query(getStarwarsQuery).toDeferred()
     }
 
-    override suspend fun getPokemonsAndSave() {
-         val pokemonApolloData : Response<GetPokemonsQuery.Data>? = getPokemonsAsync()!!.await()
-            mPokemonDB.insertPokemons(pokemonApolloData!!.data!!.pokemons()!!)
+    override suspend fun getStarwarsAndSave() {
+        val starwarsApolloData: Response<GetStarwarsQuery.Data> = getStarwarsAsync()!!.await()
+        mStarwarsDB.insertStarwars(starwarsApolloData.data!!.allFilms()?.films()!!)
     }
 
-    override suspend fun getPokemonsSync(): Response<GetPokemonsQuery.Data?> {
+    override suspend fun getStarwarsSync(): Response<GetStarwarsQuery.Data?> {
         return mApolloClient.query(
-                GetPokemonsQuery.builder().build()
-        ).execute<GetPokemonsQuery.Data?>()
+            GetStarwarsQuery.builder().build()
+        ).execute<GetStarwarsQuery.Data?>()
     }
 
 
@@ -42,11 +45,11 @@ class PokemonRepositoryImpl @Inject constructor(private val mApolloClient: Apoll
      * does not really matter if it is blocked since it only has one purpose and also because Apollo will throw a
      * 503 error if it is not a blocking call.
      */
-    override fun getPokemonsAndSaveBlocking() {
-       runBlocking {
-           val pokemonApolloData : Response<GetPokemonsQuery.Data?> = getPokemonsSync()
-           mPokemonDB.insertPokemons(pokemonApolloData.data!!.pokemons()!!)
-       }
+    override fun getStarwarsAndSaveBlocking() {
+        runBlocking {
+            val starwarsApolloData: Response<GetStarwarsQuery.Data?> = getStarwarsSync()
+            mStarwarsDB.insertStarwars(starwarsApolloData.data!!.allFilms()?.films()!!)
+        }
     }
 
     /**

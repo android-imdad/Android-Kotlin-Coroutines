@@ -1,18 +1,14 @@
 package lk.spacewa.coroutines.ui.home
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import lk.spacewa.coroutines.BR
-import lk.spacewa.coroutines.GetPokemonsQuery
 import lk.spacewa.coroutines.R
-import lk.spacewa.coroutines.data.model.db.Pokemon
 import lk.spacewa.coroutines.ui.base.BaseActivity
 import lk.spacewa.coroutines.databinding.ActivityHomeBinding
-import timber.log.Timber
 
 /**
  * Created by Imdad on 05/11/20.
@@ -43,20 +39,20 @@ class HomeActivity : BaseActivity<ActivityHomeBinding?, HomeViewModel?>() {
     }
 
     private fun setListeners(){
-        viewDataBinding?.fabSortPokemons?.setOnClickListener {
+        viewDataBinding?.fabSortStarwars?.setOnClickListener {
             viewModel?.switchData()
         }
     }
     private fun initRecyclerView(){
         val homeRvAdapter = HomeRvAdapter()
         val layoutManager = LinearLayoutManager(this@HomeActivity)
-        viewDataBinding?.rvPokemonDetails?.layoutManager = layoutManager
-        viewDataBinding?.rvPokemonDetails?.adapter = homeRvAdapter
+        viewDataBinding?.rvStarwarsDetails?.layoutManager = layoutManager
+        viewDataBinding?.rvStarwarsDetails?.adapter = homeRvAdapter
         subscribeUI(homeRvAdapter)
     }
 
     private fun subscribeUI(adapter: HomeRvAdapter){
-        viewModel?.pokemonSortMediator!!.observe(this, Observer {
+        viewModel?.starwarsSortMediator!!.observe(this, Observer {
             adapter.submitList(it)
         })
 

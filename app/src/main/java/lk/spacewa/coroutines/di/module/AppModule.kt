@@ -1,12 +1,9 @@
 package lk.spacewa.coroutines.di.module
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -16,20 +13,18 @@ import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import lk.spacewa.coroutines.data.AppDataManager
 import lk.spacewa.coroutines.data.DataManager
-import lk.spacewa.coroutines.data.RefreshPokemonDataWork
 import lk.spacewa.coroutines.data.local.db.AppDatabase
-import lk.spacewa.coroutines.data.local.db.PokemonDBRepo
-import lk.spacewa.coroutines.data.local.db.PokemonDBRepoImpl
+import lk.spacewa.coroutines.data.local.db.StarwarsDBRepo
+import lk.spacewa.coroutines.data.local.db.StarwarsDBRepoImpl
 import lk.spacewa.coroutines.data.local.prefs.PreferencesHelper
 import lk.spacewa.coroutines.data.local.prefs.PreferencesHelperImpl
-import lk.spacewa.coroutines.data.remote.repository.PokemonRepository
-import lk.spacewa.coroutines.data.remote.repository.PokemonRepositoryImpl
+import lk.spacewa.coroutines.data.remote.repository.StarwarsRepository
+import lk.spacewa.coroutines.data.remote.repository.StarwarsRepositoryImpl
 import lk.spacewa.coroutines.di.DatabaseInfo
 import lk.spacewa.coroutines.di.PreferenceInfo
 import lk.spacewa.coroutines.utils.AppConstants
 import lk.spacewa.coroutines.utils.rx.AppSchedulerProvider
 import lk.spacewa.coroutines.utils.rx.SchedulerProvider
-import timber.log.Timber
 import javax.inject.Singleton
 
 /**
@@ -82,7 +77,7 @@ class AppModule {
 //   Work manager can be run here with the following commented lines of code but since we are already running the work manager in the application class
 //   this is redundant
 
-//                        val request = OneTimeWorkRequestBuilder<RefreshPokemonDataWork>().build()
+//                        val request = OneTimeWorkRequestBuilder<RefreshStarwarsDataWork>().build()
 //                        WorkManager.getInstance(context).enqueue(request)
                     }
                 })
@@ -91,14 +86,14 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providePokemonDB(pokemonDBRepoImpl: PokemonDBRepoImpl): PokemonDBRepo {
-        return pokemonDBRepoImpl
+    fun provideStarwarsDB(starwarsDBRepoImpl: StarwarsDBRepoImpl): StarwarsDBRepo {
+        return starwarsDBRepoImpl
     }
 
     @Provides
     @Singleton
-    fun providePokemonRepository(pokemonRepositoryImpl: PokemonRepositoryImpl): PokemonRepository {
-        return pokemonRepositoryImpl
+    fun provideStarwarsRepository(starwarsRepositoryImpl: StarwarsRepositoryImpl): StarwarsRepository {
+        return starwarsRepositoryImpl
     }
 
 

@@ -1,13 +1,13 @@
 package lk.spacewa.coroutines.data
 
-import lk.spacewa.coroutines.data.local.db.PokemonDBRepo
+import lk.spacewa.coroutines.data.local.db.StarwarsDBRepo
 import lk.spacewa.coroutines.data.local.prefs.PreferencesHelper
-import lk.spacewa.coroutines.data.remote.repository.PokemonRepository
+import lk.spacewa.coroutines.data.remote.repository.StarwarsRepository
 
 /**
  * Created by Imdad on 05/11/20.
  */
-interface DataManager : PreferencesHelper,PokemonRepository,PokemonDBRepo {
+interface DataManager : PreferencesHelper,StarwarsRepository,StarwarsDBRepo {
     fun setUserAsLoggedOut()
     fun updateUserInfo(
             accessToken: String?,

@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Android Coroutines</string>
-    <string name="base_api_url">https://graphql-pokemon.now.sh</string>
+    <string name="base_api_url">https://swapi-graphql.netlify.app/.netlify/functions/index</string>
 </resources>

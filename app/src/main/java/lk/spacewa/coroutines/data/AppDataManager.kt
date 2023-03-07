@@ -5,15 +5,13 @@ import androidx.lifecycle.LiveData
 import com.apollographql.apollo.api.Response
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.reactivex.rxjava3.core.Observable
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.flow.Flow
-import lk.spacewa.coroutines.GetPokemonsQuery
+import lk.spacewa.coroutines.GetStarwarsQuery
 import lk.spacewa.coroutines.data.DataManager.LoggedInMode
-import lk.spacewa.coroutines.data.local.db.PokemonDBRepo
+import lk.spacewa.coroutines.data.local.db.StarwarsDBRepo
 import lk.spacewa.coroutines.data.local.prefs.PreferencesHelper
-import lk.spacewa.coroutines.data.model.db.Pokemon
-import lk.spacewa.coroutines.data.remote.repository.PokemonRepository
+import lk.spacewa.coroutines.data.model.db.Starwars
+import lk.spacewa.coroutines.data.remote.repository.StarwarsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +19,7 @@ import javax.inject.Singleton
  * Created by Imdad on 05/11/20.
  */
 @Singleton
-class AppDataManager @Inject constructor(@ApplicationContext private val mContext: Context, private val mPreferencesHelper: PreferencesHelper,private val mPokemonRepository: PokemonRepository, private val mGson: Gson,private val mAppPokemonDBRepo: PokemonDBRepo) : DataManager {
+class AppDataManager @Inject constructor(@ApplicationContext private val mContext: Context, private val mPreferencesHelper: PreferencesHelper,private val mStarwarsRepository: StarwarsRepository, private val mGson: Gson,private val mAppStarwarsDBRepo: StarwarsDBRepo) : DataManager {
 
 
     override var currentAccessToken: String?
@@ -68,31 +66,31 @@ class AppDataManager @Inject constructor(@ApplicationContext private val mContex
             mPreferencesHelper.selectedLanguage = selectedLanguage
         }
 
-    override fun getPokemonsAsync(): Deferred<Response<GetPokemonsQuery.Data>> {
-       return mPokemonRepository.getPokemonsAsync()!!
+    override fun getStarwarsAsync(): Deferred<Response<GetStarwarsQuery.Data>> {
+       return mStarwarsRepository.getStarwarsAsync()!!
     }
 
-    override suspend fun getPokemonsAndSave() {
-        return mPokemonRepository.getPokemonsAndSave()
+    override suspend fun getStarwarsAndSave() {
+        return mStarwarsRepository.getStarwarsAndSave()
     }
 
-    override suspend fun getPokemonsSync(): Response<GetPokemonsQuery.Data?> {
-        return mPokemonRepository.getPokemonsSync()
+    override suspend fun getStarwarsSync(): Response<GetStarwarsQuery.Data?> {
+        return mStarwarsRepository.getStarwarsSync()
     }
 
-    override fun getPokemonsAndSaveBlocking() {
-        return mPokemonRepository.getPokemonsAndSaveBlocking()
+    override fun getStarwarsAndSaveBlocking() {
+        return mStarwarsRepository.getStarwarsAndSaveBlocking()
     }
 
-    override val pokemonLiveData: LiveData<List<Pokemon>>
-        get() = mAppPokemonDBRepo.pokemonLiveData
+    override val starwarsLiveData: LiveData<List<Starwars>>
+        get() = mAppStarwarsDBRepo.starwarsLiveData
 
-    override val pokemonLiveDataSortedByNumber: LiveData<List<Pokemon>>
-        get() = mAppPokemonDBRepo.pokemonLiveDataSortedByNumber
+    override val starwarsLiveDataSortedByID: LiveData<List<Starwars>>
+        get() = mAppStarwarsDBRepo.starwarsLiveDataSortedByID
 
 
-    override suspend fun insertPokemons(pokemons: List<GetPokemonsQuery.Pokemon>) {
-        mAppPokemonDBRepo.insertPokemons(pokemons)
+    override suspend fun insertStarwars(starwars: List<GetStarwarsQuery.Film>) {
+        mAppStarwarsDBRepo.insertStarwars(starwars)
     }
 
 

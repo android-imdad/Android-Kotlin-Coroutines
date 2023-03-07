@@ -1,0 +1,9 @@
+query GetStarwars {
+  allFilms {
+    films {
+      id
+      title
+      director
+    }
+  }
+}

@@ -4,12 +4,11 @@ import android.content.Context
 import androidx.hilt.Assisted
 import androidx.hilt.work.WorkerInject
 import androidx.work.*
-import timber.log.Timber
 
 /**
  * Created by Imdad on 8/7/2020.
  */
-class RefreshPokemonDataWork @WorkerInject constructor (@Assisted context: Context, @Assisted params: WorkerParameters, private val dataManager: AppDataManager) :
+class RefreshStarwarsDataWork @WorkerInject constructor (@Assisted context: Context, @Assisted params: WorkerParameters, private val dataManager: AppDataManager) :
         CoroutineWorker(context, params) {
 
 
@@ -22,7 +21,7 @@ class RefreshPokemonDataWork @WorkerInject constructor (@Assisted context: Conte
      */
     override suspend fun doWork(): Result {
         return try {
-            dataManager.getPokemonsAndSaveBlocking()
+            dataManager.getStarwarsAndSaveBlocking()
 
             Result.success()
         } catch (error: Throwable) {

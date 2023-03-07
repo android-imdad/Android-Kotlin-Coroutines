@@ -1,6 +1,5 @@
 package lk.spacewa.coroutines.ui.home
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,17 +7,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import lk.spacewa.coroutines.R
-import lk.spacewa.coroutines.data.model.db.Pokemon
-import lk.spacewa.coroutines.databinding.ItemPokemonDetailsBinding
+import lk.spacewa.coroutines.data.model.db.Starwars
+import lk.spacewa.coroutines.databinding.ItemStarwarsDetailsBinding
 
 
-class HomeRvAdapter : ListAdapter<Pokemon, HomeRvAdapter.ViewHolder?>(PokemonDiffCallBack()) {
+class HomeRvAdapter : ListAdapter<Starwars, HomeRvAdapter.ViewHolder?>(StarwarsDiffCallBack()) {
 
 
     // Create new views (invoked by the layout manager)
@@ -26,7 +20,7 @@ class HomeRvAdapter : ListAdapter<Pokemon, HomeRvAdapter.ViewHolder?>(PokemonDif
         // create a new view
         val layoutInflater = LayoutInflater.from(parent.context)
         // set the view's size, margins, paddings and layout parameters
-        val binding: ItemPokemonDetailsBinding = DataBindingUtil.inflate(layoutInflater, R.layout.item_pokemon_details, parent, false)
+        val binding: ItemStarwarsDetailsBinding = DataBindingUtil.inflate(layoutInflater, R.layout.item_starwars_details, parent, false)
         return ViewHolder(binding)
     }
 
@@ -36,30 +30,20 @@ class HomeRvAdapter : ListAdapter<Pokemon, HomeRvAdapter.ViewHolder?>(PokemonDif
     }
 
     private fun initRecyclerView(holder: ViewHolder, position: Int) {
-        val pokemon: Pokemon = getItem(position)
+        val starwars: Starwars = getItem(position)
 
-        var requestOptions = RequestOptions()
-        requestOptions = requestOptions
-                .transforms(CenterCrop(), RoundedCorners(16))
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
+        holder.mBinding.tvStarwarsTitle.text = starwars.title
+        holder.mBinding.tvStarwarsDesc.text = starwars.director
 
-        Glide.with(holder.mBinding.root)
-                .load(pokemon.imageUrl)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .apply(requestOptions)
-                .into(holder.mBinding.imgPokemon)
-
-        holder.mBinding.tvPokemon.text = pokemon.name
 
     }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    class ViewHolder(itemBinding: ItemPokemonDetailsBinding) : RecyclerView.ViewHolder(itemBinding.getRoot()), View.OnClickListener {
+    class ViewHolder(itemBinding: ItemStarwarsDetailsBinding) : RecyclerView.ViewHolder(itemBinding.getRoot()), View.OnClickListener {
         // each data item is just a string in this case
-        val mBinding: ItemPokemonDetailsBinding = itemBinding
+        val mBinding: ItemStarwarsDetailsBinding = itemBinding
         override fun onClick(v: View) {}
 
     }
@@ -68,13 +52,13 @@ class HomeRvAdapter : ListAdapter<Pokemon, HomeRvAdapter.ViewHolder?>(PokemonDif
     /**
      * Uses DiffUtil to compare items in a list and automatically make changes only to the items which differ
      */
-    private class PokemonDiffCallBack : DiffUtil.ItemCallback<Pokemon>() {
+    private class StarwarsDiffCallBack : DiffUtil.ItemCallback<Starwars>() {
 
-        override fun areItemsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
-            return oldItem.pokemonId == newItem.pokemonId
+        override fun areItemsTheSame(oldItem: Starwars, newItem: Starwars): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Pokemon, newItem: Pokemon): Boolean {
+        override fun areContentsTheSame(oldItem: Starwars, newItem: Starwars): Boolean {
             return oldItem == newItem
         }
     }
